@@ -8,7 +8,19 @@
 body {
   background: url(fond-hexagonal-degrade_79603-1630.jpg) no-repeat;
   background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
   /* line-height: 1.6; */
+}
+
+a {
+  text-decoration: none;
+  color: aliceblue;
+}
+
+a:active {
+  text-decoration: none;
+  color: aliceblue;
 }
 
 .login-header {
@@ -17,7 +29,7 @@ body {
 }
 
 .container {
-  
+
   background-position: center;
   display: flex;
   justify-content: center;
@@ -28,8 +40,7 @@ body {
 }
 
 .login-container {
-  grid-row: 1;
-  grid-column: 1;
+  width: 20rem;
   background: transparent;
   border-radius: 12px;
   border: 2px solid rgba(255, 255, 255, .2);
@@ -91,6 +102,12 @@ body {
   border-radius: 11%;
 }
 
+.error-msg {
+  color: rgb(214, 8, 8);
+  height: auto;
+  margin-bottom: 20px;
+}
+
 .navbar {
   background-color: #2c3e50ae;
   padding: 1rem 2rem;
@@ -102,10 +119,13 @@ body {
   bottom: 0;
   width: 100%;
   background-color: #2c3e50;
-  padding: 0.5rem ;
+  padding: 0.5rem;
+}
+.footer p {
+  text-align: center;
 }
 
-.profile-header{
+.profile-header {
   position: absolute;
   top: 90px;
   width: 80%;
@@ -113,7 +133,7 @@ body {
   background-color: #2c3e50c4;
 }
 
-.userdata{
+.userdata {
   position: absolute;
   top: 200px;
   width: 40%;
@@ -122,7 +142,7 @@ body {
   background-color: #2c3e50c4;
 }
 
-.totalXP{
+.totalXP {
   position: absolute;
   top: 200px;
   width: 40%;
@@ -131,7 +151,7 @@ body {
   background-color: #2c3e50c4;
 }
 
-.auditRatio{
+.auditRatio {
   position: absolute;
   top: 450px;
   width: 40%;
@@ -140,7 +160,7 @@ body {
   background-color: #2c3e50c4;
 }
 
-.skills{
+.skills {
   position: absolute;
   top: 450px;
   width: 40%;
@@ -148,7 +168,8 @@ body {
   left: 55%;
   background-color: #2c3e50c4;
 }
-.xpProgress{
+
+.xpProgress {
   position: absolute;
   top: 700px;
   width: 80%;
