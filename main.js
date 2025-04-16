@@ -1,19 +1,48 @@
-
 const token = localStorage.getItem("mytoken");
 
-if (!token){
-   loginTemplate()
-}else{
+if (!token) {
+    loginTemplate()
+} else {
     displayProfile()
+    console.log(token);
+    getdata(token)
 }
 
+async function getdata(token) {
+    const query = `{
+  user{
+    login
+    firstName
+    lastName
+  }
+}`
+    try {
+        const response = await fetch("https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ query })
+        })
+        if (!response.ok) {
+            throw await response.json()
+        }
+        const res = await response.json()
+        const a = res.data.user[0]
+        console.log("dqtq=>", a);
+        document.querySelector('.profile-header').innerHTML = `<span>${a.login}</span>`
+        return
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-async function decod(username , password) {
+async function decod(username, password) {
     try {
         const response = await fetch("https://learn.zone01oujda.ma/api/auth/signin", {
             method: "POST",
             headers: {
-                "Authorization": "Basic "+ btoa(username + ":" + password)
+                "Authorization": "Basic " + btoa(username + ":" + password)
             }
         })
         if (!response.ok) {
@@ -21,20 +50,19 @@ async function decod(username , password) {
         }
         localStorage.setItem("mytoken", await response.json());
         displayProfile()
-    return 
-    } catch (error) {       
+        return
+    } catch (error) {
         displayerror(error.error)
-        //console.error(error.error);
     }
 }
 
 
-function displayerror(msgerror){
+function displayerror(msgerror) {
     const errormsg = document.querySelector(".error-msg")
     errormsg.textContent = msgerror
 }
 
-function displayProfile(){
+function displayProfile() {
     document.body.innerHTML = `
      <nav class="navbar">
         <button class="logout-btn">Logout</button>
@@ -63,14 +91,14 @@ function displayProfile(){
         <p class="copyright">Made with 🤍🤎 by <a href="https://github.com/fennadafy">fennadafy</a></p>
     </footer >`
     const logoutbtn = document.body.querySelector('.logout-btn')
-    logoutbtn.addEventListener("click",function(){
+    logoutbtn.addEventListener("click", function () {
         localStorage.removeItem("mytoken");
         loginTemplate()
 
     })
 }
 
-function loginTemplate(){
+function loginTemplate() {
     document.body.innerHTML = `
     <div class="container">
     <div class="login-container">
@@ -91,16 +119,16 @@ function loginTemplate(){
         </form>
     </div>
 </div>`
-const submatbutton = document.querySelector(".login-button")
-// console.log(submatbutton);
-submatbutton.addEventListener("click", function (event) {
-    // console.lotokeng("rrrr");
-    event.preventDefault()
-    const username = document.querySelector(".username").value
-    // console.log(username.value);
-    const password = document.querySelector(".password").value
-    // console.log(password.value);
-    decod(username , password)
-})
+    const submatbutton = document.querySelector(".login-button")
+    // console.log(submatbutton);
+    submatbutton.addEventListener("click", function (event) {
+        // console.lotokeng("rrrr");
+        event.preventDefault()
+        const username = document.querySelector(".username").value
+        // console.log(username.value);
+        const password = document.querySelector(".password").value
+        // console.log(password.value);
+        decod(username, password)
+    })
 }
 
