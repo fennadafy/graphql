@@ -13,8 +13,25 @@ async function getdata(token) {
   user{
     login
     firstName
-    lastName
+    campus
+    totalDown
+    totalUp
   }
+      object(where: { type: { _eq: "project" } }) {
+    type
+  }
+    group_user{
+  userAuditRatio
+}
+  transaction(where: { type: { _eq: "xp" } }){
+  amount
+}
+  group{
+  captain {
+  id
+   }
+   }
+   
 }`
     try {
         const response = await fetch("https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql", {
@@ -28,9 +45,11 @@ async function getdata(token) {
             throw await response.json()
         }
         const res = await response.json()
-        const a = res.data.user[0]
-        console.log("dqtq=>", a);
-        document.querySelector('.profile-header').innerHTML = `<span>${a.login}</span>`
+        const user = res.data.user[0]
+        document.querySelector('.profile-header').innerHTML = `  <div class="welcome-container">
+    <span class="welcome-text">Welcome,</span>
+    <span class="user-name">${user.login}</span>
+     </div>`
         return
     } catch (error) {
         console.log(error);
@@ -69,6 +88,7 @@ function displayProfile() {
     </nav>
     <div class="container">
         <div class="profile-header">
+
         </div>
         <div class="userdata">
 
@@ -76,25 +96,17 @@ function displayProfile() {
         <div class="totalXP">
 
         </div>
-        <div class="auditRatio">
-
-        </div>
-        <div class="skills">
-
-        </div>
         <div class="xpProgress">
 
         </div>
-
     </div>
     <footer class="footer">
-        <p class="copyright">Made with 🤍🤎 by <a href="https://github.com/fennadafy">fennadafy</a></p>
+        <p class="copyright">Made with 🤍 by <a href="https://github.com/fennadafy">fennadafy</a></p>
     </footer >`
     const logoutbtn = document.body.querySelector('.logout-btn')
     logoutbtn.addEventListener("click", function () {
         localStorage.removeItem("mytoken");
         loginTemplate()
-
     })
 }
 
@@ -120,14 +132,10 @@ function loginTemplate() {
     </div>
 </div>`
     const submatbutton = document.querySelector(".login-button")
-    // console.log(submatbutton);
     submatbutton.addEventListener("click", function (event) {
-        // console.lotokeng("rrrr");
         event.preventDefault()
         const username = document.querySelector(".username").value
-        // console.log(username.value);
         const password = document.querySelector(".password").value
-        // console.log(password.value);
         decod(username, password)
     })
 }
