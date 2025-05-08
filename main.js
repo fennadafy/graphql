@@ -10,7 +10,7 @@ if (!token) {
 
 async function getdata(token) {
     const query = `{
-  user{
+  user {
     login
     firstName
     campus
@@ -30,8 +30,33 @@ async function getdata(token) {
   captain {
   id
    }
-   }
+   } 
    
+    xp_view (order_by: {amount: asc}) {
+    amount
+  }
+   
+xp_view{
+  amount
+}
+
+
+transaction_aggregate{
+ aggregate{
+  max{
+    amount
+  }
+   min{
+    amount
+  }
+}
+  nodes{
+    type
+  }
+}
+
+
+
 }`
     try {
         const response = await fetch("https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql", {
