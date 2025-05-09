@@ -9,77 +9,76 @@ if (!token) {
 }
 
 async function getdata(token) {
-    const query = `{
+
+const query = `{
   user {
     login
     firstName
+    lastName
+    auditRatio
+    email : attrs(path : "email")
     campus
-    totalDown
-    totalUp
+    transactions_aggregate(where: {eventId: {_eq: 41}, type: {_eq: "xp"}}) {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
   }
-      object(where: { type: { _eq: "project" } }) {
-    type
-  }
-    group_user{
-  userAuditRatio
-}
-  transaction(where: { type: { _eq: "xp" } }){
-  amount
-}
-  group{
-  captain {
-  id
-   }
-   } 
-   
-    xp_view (order_by: {amount: asc}) {
-    amount
-  }
-   
-xp_view{
-  amount
-}
-
-
-transaction_aggregate{
- aggregate{
-  max{
-    amount
-  }
-   min{
-    amount
+  
+ skills :  transaction(
+      distinct_on: type 
+      where: { type: { _like: "skill_%" } }
+      order_by: [{ type: asc }, { amount: desc }]
+    ) {
+      type
+      amount
+    }
+  
+progress : transaction (
+      where: {type: {_eq: "xp"}, 
+      eventId: {_eq: 41},
+      object: {type: {_neq: "exercise"}, _and: {name: {_neq: "Module"}}}}
+    ) {
+      amount
+      object {
+        name
+    }
   }
 }
-  nodes{
-    type
-  }
-}
-
-
-
-}`
+`
     try {
         const response = await fetch("https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql", {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + token
             },
-            body: JSON.stringify({ query })
+            body: JSON.stringify({query})
         })
         if (!response.ok) {
             throw await response.json()
         }
         const res = await response.json()
-        const user = res.data.user[0]
-        document.querySelector('.profile-header').innerHTML = `  <div class="welcome-container">
-    <span class="welcome-text">Welcome,</span>
-    <span class="user-name">${user.login}</span>
-     </div>`
+        preperdata(res)
         return
     } catch (error) {
         console.log(error);
     }
 }
+
+
+
+async function preperdata(data) {
+    
+    document.querySelector(".profile-header")
+
+    
+    console.log("=============>", data.data.progress[0].object.name);
+
+
+}
+
 
 async function decod(username, password) {
     try {
