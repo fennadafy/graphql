@@ -152,7 +152,7 @@ a:active {
   left: 55%;
   background-color: #2c3e50c4;
 }
-
+/* 
 .auditRatio {
   position: absolute;
   top: 450px;
@@ -160,7 +160,7 @@ a:active {
   height: 200px;
   left: 5%;
   background-color: #2c3e50c4;
-}
+} */
 
 .skills {
   position: absolute;
@@ -170,12 +170,32 @@ a:active {
   left: 55%;
   background-color: #2c3e50c4;
 }
+svg {
+  margin-top: 20px;
+}
+.label {
+  font-size: 10px;
+  text-anchor: middle;
+}
+.axis-label {
+  font-size: 10px;
+}
+.tick {
+  stroke: #000;
+  stroke-width: 1;
+}
+.tooltip {
+  fill: rgb(158, 158, 158);
+  font-size: 12px;
+  text-anchor: middle;
+}
+
 
 .xpProgress {
   position: absolute;
   top: 570px;
   width: 80%;
-  height: 200px;
+  height: 290px;
   background-color: #2c3e50c4;}
 
 

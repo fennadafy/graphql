@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Skills Bar Chart with Hover</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    svg {
+      margin-top: 20px;
+    }
+    .label {
+      font-size: 10px;
+      text-anchor: middle;
+    }
+    .axis-label {
+      font-size: 10px;
+    }
+    .tick {
+      stroke: #000;
+      stroke-width: 1;
+    }
+    .tooltip {
+      fill: green;
+      font-size: 12px;
+      text-anchor: middle;
+    }
+    /* .hover-line {
+      stroke: green;
+      stroke-width: 2;
+      stroke-dasharray: 4;
+    } */
+  </style>
+</head>
+<body>
+  <h2>Skills by Points</h2>
+  <svg id="chart" width="1100" height="300"></svg>
+
+  <script>
+    const skills =
+//     {
+// " skill_ai": 5,
+// "skill_algo": 35,
+// "skill_back-end": 50,
+// "skill_css": 15,
+// "skill_docker": 15,
+// "skill_front-end": 45,
+// "skill_game": 12,
+// "skill_go": 55,
+// "skill_html": 35,
+// "skill_js": 40,
+// "skill_prog": 65,
+// "skill_sql": 25,
+// "skill_stats": 25,
+// "skill_sys-admin": 5,
+// "skill_tcp": 30,
+// "skill_unix": 15
+//     }
+    
+    [
+      { name: 'ai', points: 5 },
+      { name: 'algo', points: 35 },
+      { name: 'back-end', points: 50 },
+      { name: 'css', points: 15 },
+      { name: 'docker', points: 15 },
+      { name: 'front-end', points: 45 },
+      { name: 'game', points: 12 },
+      { name: 'go', points: 55 },
+      { name: 'html', points: 35 },
+      { name: 'js', points: 40 },
+      { name: 'prog', points: 65 },
+      { name: 'sql', points: 25 },
+      { name: 'stats', points: 25 },
+      { name: 'sys-admin', points: 5 },
+      { name: 'tcp', points: 30 },
+      { name: 'unix', points: 15 },
+    ];
+
+    const svg = document.getElementById("chart");
+    const barWidth = 30;
+    const spacing = 10;
+    const paddingLeft = 50;
+    const paddingBottom = 40;
+    const paddingTop = 20;
+    const paddingRight = 20;
+    const chartHeight = 200;
+    const chartWidth = skills.length * (barWidth + spacing);
+
+    const maxPoints = 70; // Rounded for better Y-axis scaling
+
+    // Draw Y-axis ticks and labels
+    for (let i = 0; i <= maxPoints; i += 10) {
+      const y = paddingTop + chartHeight - (i / maxPoints) * chartHeight;
+
+      // Tick line
+      const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      tick.setAttribute("x1", paddingLeft - 5);
+      tick.setAttribute("x2", paddingLeft);
+      tick.setAttribute("y1", y);
+      tick.setAttribute("y2", y);
+      tick.setAttribute("class", "tick");
+      svg.appendChild(tick);
+
+      // Label
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", paddingLeft - 10);
+      label.setAttribute("y", y + 4);
+      label.setAttribute("text-anchor", "end");
+      label.setAttribute("class", "axis-label");
+      label.textContent = i;
+      svg.appendChild(label);
+    }
+
+    // Y-axis line
+    const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    yAxis.setAttribute("x1", paddingLeft);
+    yAxis.setAttribute("x2", paddingLeft);
+    yAxis.setAttribute("y1", paddingTop);
+    yAxis.setAttribute("y2", paddingTop + chartHeight);
+    yAxis.setAttribute("stroke", "#000");
+    yAxis.setAttribute("stroke-width", 1.5);
+    svg.appendChild(yAxis);
+
+    // X-axis line
+    const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    xAxis.setAttribute("x1", paddingLeft);
+    xAxis.setAttribute("x2", paddingLeft + chartWidth);
+    xAxis.setAttribute("y1", paddingTop + chartHeight);
+    xAxis.setAttribute("y2", paddingTop + chartHeight);
+    xAxis.setAttribute("stroke", "#000");
+    xAxis.setAttribute("stroke-width", 1.5);
+    svg.appendChild(xAxis);
+
+    // Tooltip elements (invisible by default)
+    const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    tooltip.setAttribute("class", "tooltip");
+    tooltip.setAttribute("visibility", "hidden");
+    svg.appendChild(tooltip);
+
+    const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hoverLine.setAttribute("class", "hover-line");
+    hoverLine.setAttribute("visibility", "hidden");
+    svg.appendChild(hoverLine);
+
+    // Bars and X-axis labels
+    skills.forEach((skill, index) => {
+      const height = (skill.points / maxPoints) * chartHeight;
+      const x = paddingLeft + index * (barWidth + spacing);
+      const y = paddingTop + chartHeight - height;
+
+      // Bar
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", x);
+      rect.setAttribute("y", y);
+      rect.setAttribute("width", barWidth);
+      rect.setAttribute("height", height);
+      rect.setAttribute("fill", "#69b3a2");
+      svg.appendChild(rect);
+
+      // Label
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", x + barWidth / 2);
+      label.setAttribute("y", paddingTop + chartHeight + 12);
+      label.setAttribute("class", "label");
+      console.log('rrrtt',skill.name);
+      
+      label.textContent = skill.name;
+      svg.appendChild(label);
+
+      // Hover event listeners
+      rect.addEventListener("mouseenter", function() {
+        tooltip.setAttribute("x", x + barWidth / 2);
+        tooltip.setAttribute("y", y - 10);
+        tooltip.setAttribute("visibility", "visible");
+        tooltip.textContent = skill.points;
+
+        hoverLine.setAttribute("x1", x + barWidth / 2);
+        hoverLine.setAttribute("y1", paddingTop);
+        hoverLine.setAttribute("x2", x + barWidth / 2);
+        hoverLine.setAttribute("y2", y);
+        hoverLine.setAttribute("visibility", "visible");
+      });
+
+      rect.addEventListener("mouseleave", function() {
+        tooltip.setAttribute("visibility", "hidden");
+        hoverLine.setAttribute("visibility", "hidden");
+      });
+    });
+  </script>
+</body>
+</html>
