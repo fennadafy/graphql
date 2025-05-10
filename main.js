@@ -349,10 +349,10 @@ skills.forEach((skill, index) => {
     hoverLine.setAttribute("y2", y);
     hoverLine.setAttribute("visibility", "visible");
   });
-//   rect.addEventListener("mouseleave", function() {
-//     tooltip.setAttribute("visibility", "hidden");
-//     hoverLine.setAttribute("visibility", "hidden");
-//   });
+  rect.addEventListener("mouseleave", function() {
+    tooltip.setAttribute("visibility", "hidden");
+    hoverLine.setAttribute("visibility", "hidden");
+  });
 });
 
 }
