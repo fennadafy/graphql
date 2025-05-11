@@ -71,18 +71,12 @@ progress : transaction (
 
 
 function prepareData(data) {
-    console.log("data============",data);
     
     let userdata
 
 
-    const skillsObject = {}
     const progressObject = {}
-// console.log("frrrrr", data.data.skills);
 
-    // data.data.skills.forEach(skill => {
-    //     skillsObject[skill.type] = skill.amount
-    // })
     data.data.progress.forEach(progress => {
         progressObject[progress.object.name] = progress.amount
     })
@@ -142,17 +136,17 @@ function displayProfile(userdata) {
     </nav>
     <div class="container">
         <div class="profile-header">
-        <h1 class="">Welcome</h1>
+        <div class="welcome">Welcome,</div>
         </div>
 
         <div class="userdata">
         </div>
 
         <div class="totalXP">
+        <svg id="chart" viewBox="0 0 800 250" preserveAspectRatio="none"></svg>
         </div>
 
         <div class="xpProgress">
-            <svg id="chart" width="1000" height="300"></svg>
         </div>
 
     </div>
@@ -169,6 +163,7 @@ function displayProfile(userdata) {
     profileHeader(userdata)
     userInfo(userdata)
     SkillsGraph(userdata.skills)
+    ProgressGraph(userdata.progress)
 }
 
 function loginTemplate() {
@@ -204,6 +199,7 @@ function loginTemplate() {
 function profileHeader(userdata) {
     const div = document.createElement("div")
     div.textContent = userdata.firstName + " " + userdata.lastName
+    div.className = "username"
     document.querySelector(".profile-header").appendChild(div)
 }
 
@@ -243,7 +239,6 @@ function userInfo(userdata) {
 }
 
 function SkillsGraph(skills){
-console.log("ggg",skills);
 
 const svg = document.getElementById("chart");
 const barWidth = 30;
@@ -355,4 +350,110 @@ skills.forEach((skill, index) => {
   });
 });
 
+}
+
+function ProgressGraph(progress){
+    console.log("progress=>",progress);
+    const labels = Object.keys(progress);
+    const values = Object.values(progress);
+
+    const width = 1000;
+    const height = 530;
+    const padding = 60;
+    // <svg id="chart" viewBox="0 0 800 250" preserveAspectRatio="none"></svg>
+
+    const maxValue = Math.max(...values);
+
+    // Create SVG element
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 1000 650");
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("id", "ProgressGraph")
+
+    // Scale functions  
+    const xStep = (width - 2 * padding) / (labels.length - 1);
+    const scaleY = val => height - padding - (val / maxValue) * (height - 2 * padding);
+
+    const points = [];
+
+    labels.forEach((label, i) => {
+        const x = padding + i * xStep;
+        const y = scaleY(progress[label]);
+        points.push({ x, y, label });
+
+        // Draw circle
+        const circle = document.createElementNS(svgNS, "circle");
+        circle.setAttribute("cx", x);
+        circle.setAttribute("cy", y);
+        circle.setAttribute("r", 4);
+        circle.setAttribute("fill", "blue");
+        svg.appendChild(circle);
+
+        // Label
+        const text = document.createElementNS(svgNS, "text");
+        text.setAttribute("x", x);
+        text.setAttribute("y", height - padding + 15);
+        text.setAttribute("font-size", "12");
+        text.setAttribute("text-anchor", "end");
+        text.setAttribute("transform", `rotate(-45 ${x},${height - padding + 15})`);
+        text.textContent = label;
+        svg.appendChild(text);
+        svg.appendChild(text);
+    });
+
+    // Draw lines between points
+    for (let i = 0; i < points.length - 1; i++) {
+        const line = document.createElementNS(svgNS, "line");
+        line.setAttribute("x1", points[i].x);
+        line.setAttribute("y1", points[i].y);
+        line.setAttribute("x2", points[i + 1].x);
+        line.setAttribute("y2", points[i + 1].y);
+        line.setAttribute("stroke", "blue");
+        line.setAttribute("stroke-width", "2");
+        svg.appendChild(line);
+    }
+
+    // Draw axes
+    const xAxis = document.createElementNS(svgNS, "line");
+    xAxis.setAttribute("x1", padding);
+    xAxis.setAttribute("y1", height - padding);
+    xAxis.setAttribute("x2", width - padding);
+    xAxis.setAttribute("y2", height - padding);
+    xAxis.setAttribute("stroke", "#000");
+    svg.appendChild(xAxis);
+
+    const yAxis = document.createElementNS(svgNS, "line");
+    yAxis.setAttribute("x1", padding);
+    yAxis.setAttribute("y1", padding);
+    yAxis.setAttribute("x2", padding);
+    yAxis.setAttribute("y2", height - padding);
+    yAxis.setAttribute("stroke", "#000");
+    svg.appendChild(yAxis);
+
+    // Add Y-axis labels
+    const steps = 5;
+    for (let i = 0; i <= steps; i++) {
+        const val = (maxValue / steps) * i;
+        const y = scaleY(val);
+        const text = document.createElementNS(svgNS, "text");
+        text.setAttribute("x", padding - 10);
+        text.setAttribute("y", y + 4);
+        text.setAttribute("text-anchor", "end");
+        text.setAttribute("font-size", "10");
+        text.textContent = val;
+        svg.appendChild(text);
+
+        // Grid line
+        const grid = document.createElementNS(svgNS, "line");
+        grid.setAttribute("x1", padding);
+        grid.setAttribute("y1", y);
+        grid.setAttribute("x2", width - padding);
+        grid.setAttribute("y2", y);
+        grid.setAttribute("stroke", "#ccc");
+        grid.setAttribute("stroke-dasharray", "2,2");
+        svg.appendChild(grid);
+    }
+
+    document.querySelector(".xpProgress").appendChild(svg);
 }

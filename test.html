@@ -1,191 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>Skills Bar Chart with Hover</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    svg {
-      margin-top: 20px;
-    }
-    .label {
-      font-size: 10px;
-      text-anchor: middle;
-    }
-    .axis-label {
-      font-size: 10px;
-    }
-    .tick {
-      stroke: #000;
-      stroke-width: 1;
-    }
-    .tooltip {
-      fill: green;
-      font-size: 12px;
-      text-anchor: middle;
-    }
-    /* .hover-line {
-      stroke: green;
-      stroke-width: 2;
-      stroke-dasharray: 4;
-    } */
-  </style>
+    <meta charset="UTF-8">
+    <title>SVG Line Chart (Vanilla JS)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        svg {
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
+
 <body>
-  <h2>Skills by Points</h2>
-  <svg id="chart" width="1100" height="300"></svg>
+    <h2>Line Chart</h2>
+    <div id="chart-container"></div>
 
-  <script>
-    const skills =
-//     {
-// " skill_ai": 5,
-// "skill_algo": 35,
-// "skill_back-end": 50,
-// "skill_css": 15,
-// "skill_docker": 15,
-// "skill_front-end": 45,
-// "skill_game": 12,
-// "skill_go": 55,
-// "skill_html": 35,
-// "skill_js": 40,
-// "skill_prog": 65,
-// "skill_sql": 25,
-// "skill_stats": 25,
-// "skill_sys-admin": 5,
-// "skill_tcp": 30,
-// "skill_unix": 15
-//     }
-    
-    [
-      { name: 'ai', points: 5 },
-      { name: 'algo', points: 35 },
-      { name: 'back-end', points: 50 },
-      { name: 'css', points: 15 },
-      { name: 'docker', points: 15 },
-      { name: 'front-end', points: 45 },
-      { name: 'game', points: 12 },
-      { name: 'go', points: 55 },
-      { name: 'html', points: 35 },
-      { name: 'js', points: 40 },
-      { name: 'prog', points: 65 },
-      { name: 'sql', points: 25 },
-      { name: 'stats', points: 25 },
-      { name: 'sys-admin', points: 5 },
-      { name: 'tcp', points: 30 },
-      { name: 'unix', points: 15 },
-    ];
+    <script>
+        const data = {
+            "Piscine JS": 70000,
+            "ascii-art": 6125,
+            "ascii-art-color": 6125,
+            "ascii-art-fs": 6125,
+            "ascii-art-justify": 6125,
+            "ascii-art-output": 6125,
+            "ascii-art-web": 9200,
+            "ascii-art-web-dockerize": 9200,
+            "ascii-art-web-export-file": 9200,
+            "ascii-art-web-stylize": 9200,
+            "forum": 76250,
+            "go-reloaded": 5000,
+            "groupie-tracker": 24500,
+            "groupie-tracker-visualizations": 12250,
+            "guess-it-1": 5000,
+            "lem-in": 34375,
+            "linear-stats": 10000,
+            "make-your-game": 147000,
+            "make-your-game-history": 49000,
+            "math-skills": 10000,
+            "net-cat": 12250,
+            "real-time-forum": 103500,
+            "real-time-forum-typing-in-progress": 51750
+        };
 
-    const svg = document.getElementById("chart");
-    const barWidth = 30;
-    const spacing = 10;
-    const paddingLeft = 50;
-    const paddingBottom = 40;
-    const paddingTop = 20;
-    const paddingRight = 20;
-    const chartHeight = 200;
-    const chartWidth = skills.length * (barWidth + spacing);
+        // Setup
+        const labels = Object.keys(data);
+        const values = Object.values(data);
 
-    const maxPoints = 70; // Rounded for better Y-axis scaling
+        const width = 1000;
+        const height = 530;
+        const padding = 60;
+        // <svg id="chart" viewBox="0 0 800 250" preserveAspectRatio="none"></svg>
 
-    // Draw Y-axis ticks and labels
-    for (let i = 0; i <= maxPoints; i += 10) {
-      const y = paddingTop + chartHeight - (i / maxPoints) * chartHeight;
+        const maxValue = Math.max(...values);
 
-      // Tick line
-      const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      tick.setAttribute("x1", paddingLeft - 5);
-      tick.setAttribute("x2", paddingLeft);
-      tick.setAttribute("y1", y);
-      tick.setAttribute("y2", y);
-      tick.setAttribute("class", "tick");
-      svg.appendChild(tick);
+        // Create SVG element
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("viewBox", "0 0 1000 600");
+        svg.setAttribute("height", height);
 
-      // Label
-      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      label.setAttribute("x", paddingLeft - 10);
-      label.setAttribute("y", y + 4);
-      label.setAttribute("text-anchor", "end");
-      label.setAttribute("class", "axis-label");
-      label.textContent = i;
-      svg.appendChild(label);
-    }
+        // Scale functions  
+        const xStep = (width - 2 * padding) / (labels.length - 1);
+        const scaleY = val => height - padding - (val / maxValue) * (height - 2 * padding);
 
-    // Y-axis line
-    const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    yAxis.setAttribute("x1", paddingLeft);
-    yAxis.setAttribute("x2", paddingLeft);
-    yAxis.setAttribute("y1", paddingTop);
-    yAxis.setAttribute("y2", paddingTop + chartHeight);
-    yAxis.setAttribute("stroke", "#000");
-    yAxis.setAttribute("stroke-width", 1.5);
-    svg.appendChild(yAxis);
+        const points = [];
 
-    // X-axis line
-    const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    xAxis.setAttribute("x1", paddingLeft);
-    xAxis.setAttribute("x2", paddingLeft + chartWidth);
-    xAxis.setAttribute("y1", paddingTop + chartHeight);
-    xAxis.setAttribute("y2", paddingTop + chartHeight);
-    xAxis.setAttribute("stroke", "#000");
-    xAxis.setAttribute("stroke-width", 1.5);
-    svg.appendChild(xAxis);
+        labels.forEach((label, i) => {
+            const x = padding + i * xStep;
+            const y = scaleY(data[label]);
+            points.push({ x, y, label });
 
-    // Tooltip elements (invisible by default)
-    const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    tooltip.setAttribute("class", "tooltip");
-    tooltip.setAttribute("visibility", "hidden");
-    svg.appendChild(tooltip);
+            // Draw circle
+            const circle = document.createElementNS(svgNS, "circle");
+            circle.setAttribute("cx", x);
+            circle.setAttribute("cy", y);
+            circle.setAttribute("r", 4);
+            circle.setAttribute("fill", "blue");
+            svg.appendChild(circle);
 
-    const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    hoverLine.setAttribute("class", "hover-line");
-    hoverLine.setAttribute("visibility", "hidden");
-    svg.appendChild(hoverLine);
+            // Label
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", x);
+            text.setAttribute("y", height - padding + 15);
+            text.setAttribute("font-size", "10");
+            text.setAttribute("text-anchor", "end");
+            text.setAttribute("transform", `rotate(-45 ${x},${height - padding + 15})`);
+            text.textContent = label;
+            svg.appendChild(text);
+            svg.appendChild(text);
+        });
 
-    // Bars and X-axis labels
-    skills.forEach((skill, index) => {
-      const height = (skill.points / maxPoints) * chartHeight;
-      const x = paddingLeft + index * (barWidth + spacing);
-      const y = paddingTop + chartHeight - height;
+        // Draw lines between points
+        for (let i = 0; i < points.length - 1; i++) {
+            const line = document.createElementNS(svgNS, "line");
+            line.setAttribute("x1", points[i].x);
+            line.setAttribute("y1", points[i].y);
+            line.setAttribute("x2", points[i + 1].x);
+            line.setAttribute("y2", points[i + 1].y);
+            line.setAttribute("stroke", "blue");
+            line.setAttribute("stroke-width", "2");
+            svg.appendChild(line);
+        }
 
-      // Bar
-      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rect.setAttribute("x", x);
-      rect.setAttribute("y", y);
-      rect.setAttribute("width", barWidth);
-      rect.setAttribute("height", height);
-      rect.setAttribute("fill", "#69b3a2");
-      svg.appendChild(rect);
+        // Draw axes
+        const xAxis = document.createElementNS(svgNS, "line");
+        xAxis.setAttribute("x1", padding);
+        xAxis.setAttribute("y1", height - padding);
+        xAxis.setAttribute("x2", width - padding);
+        xAxis.setAttribute("y2", height - padding);
+        xAxis.setAttribute("stroke", "#000");
+        svg.appendChild(xAxis);
 
-      // Label
-      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      label.setAttribute("x", x + barWidth / 2);
-      label.setAttribute("y", paddingTop + chartHeight + 12);
-      label.setAttribute("class", "label");
-      console.log('rrrtt',skill.name);
-      
-      label.textContent = skill.name;
-      svg.appendChild(label);
+        const yAxis = document.createElementNS(svgNS, "line");
+        yAxis.setAttribute("x1", padding);
+        yAxis.setAttribute("y1", padding);
+        yAxis.setAttribute("x2", padding);
+        yAxis.setAttribute("y2", height - padding);
+        yAxis.setAttribute("stroke", "#000");
+        svg.appendChild(yAxis);
 
-      // Hover event listeners
-      rect.addEventListener("mouseenter", function() {
-        tooltip.setAttribute("x", x + barWidth / 2);
-        tooltip.setAttribute("y", y - 10);
-        tooltip.setAttribute("visibility", "visible");
-        tooltip.textContent = skill.points;
+        // Add Y-axis labels
+        const steps = 5;
+        for (let i = 0; i <= steps; i++) {
+            const val = (maxValue / steps) * i;
+            const y = scaleY(val);
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", padding - 10);
+            text.setAttribute("y", y + 4);
+            text.setAttribute("text-anchor", "end");
+            text.setAttribute("font-size", "10");
+            text.textContent = val;
+            svg.appendChild(text);
 
-        hoverLine.setAttribute("x1", x + barWidth / 2);
-        hoverLine.setAttribute("y1", paddingTop);
-        hoverLine.setAttribute("x2", x + barWidth / 2);
-        hoverLine.setAttribute("y2", y);
-        hoverLine.setAttribute("visibility", "visible");
-      });
-      rect.addEventListener("mouseleave", function() {
-        tooltip.setAttribute("visibility", "hidden");
-        hoverLine.setAttribute("visibility", "hidden");
-      });
-    });
-  </script>
+            // Grid line
+            const grid = document.createElementNS(svgNS, "line");
+            grid.setAttribute("x1", padding);
+            grid.setAttribute("y1", y);
+            grid.setAttribute("x2", width - padding);
+            grid.setAttribute("y2", y);
+            grid.setAttribute("stroke", "#ccc");
+            grid.setAttribute("stroke-dasharray", "2,2");
+            svg.appendChild(grid);
+        }
+
+        document.getElementById("chart-container").appendChild(svg);
+    </script>
 </body>
+
 </html>
