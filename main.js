@@ -128,7 +128,15 @@ function displayerror(msgerror) {
     const errormsg = document.querySelector(".error-msg")
     errormsg.textContent = msgerror
 }
-
+//TODO
+//KB FI TOTALXP
+//TBAN DATA BLA MA N7TAJ N RELODED
+//xpprogress ykon fo9 footer
+//responsive
+//stayle
+//clear code 
+//read svg 
+//good practesses
 function displayProfile(userdata) {
     document.body.innerHTML = `
      <nav class="navbar">
