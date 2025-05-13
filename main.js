@@ -3,14 +3,17 @@ async function start() {
     const token = localStorage.getItem("mytoken");
     if (!token) {
         loginTemplate()
+
     } else {
         console.log(token);
         const userdata = await getdata(token)
+        // console.log("rrr",userdata);
         displayProfile(userdata)
     }
 }
 
-start()
+addEventListener("DOMContentLoaded", () => start())
+
 async function getdata(token) {
 
     const query = `{
@@ -116,7 +119,8 @@ async function decod(username, password) {
             throw (await response.json());
         }
         localStorage.setItem("mytoken", await response.json());
-        displayProfile()
+        // displayProfile()
+        start()
         return
     } catch (error) {
         displayerror(error.error)
@@ -126,11 +130,12 @@ async function decod(username, password) {
 
 function displayerror(msgerror) {
     const errormsg = document.querySelector(".error-msg")
-    errormsg.textContent = msgerror
+    if (errormsg){
+        errormsg.textContent = msgerror
+    }
 }
 //TODO
 //KB FI TOTALXP
-//TBAN DATA BLA MA N7TAJ N RELODED
 //xpprogress ykon fo9 footer
 //responsive
 //stayle
@@ -174,7 +179,7 @@ function displayProfile(userdata) {
     ProgressGraph(userdata.progress)
 }
 
-function loginTemplate() {
+ function loginTemplate() {
     document.body.innerHTML = `
     <div class="container">
     <div class="login-container">
@@ -200,7 +205,7 @@ function loginTemplate() {
         event.preventDefault()
         const username = document.querySelector(".username").value
         const password = document.querySelector(".password").value
-        decod(username, password)
+       decod(username, password)
     })
 }
 
