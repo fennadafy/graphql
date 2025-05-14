@@ -6,14 +6,7 @@
 }
 
 body {
-  /* background: url(fond-hexagonal-degrade_79603-1630.jpg) no-repeat; */
-  /* background-color: #3e5c76; */
-  /* width: 100%; */
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  position:relative;
-  /* line-height: 1.6; */
+
 }
 
 a {
@@ -21,16 +14,12 @@ a {
   color: aliceblue;
 }
 
-#ProgressGraph{
+#ProgressGraph {
   width: 100%;
   height: 100%;
-
 }
 
-a:active {
-  text-decoration: none;
-  color: aliceblue;
-}
+
 
 .login-header {
   margin-top: 9%;
@@ -38,20 +27,15 @@ a:active {
 }
 
 .container {
-  /* -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  height:100%;
-  padding: 0 20px; */
-  /* background-position: center; */
-  min-height: 100vh;    
+  position: relative;
   display: flex;
   place-content: center;
-  
 }
-#content > div {
+
+#content>div {
   padding: 70px 0;
 }
+
 .login-container {
   width: 30rem;
   background: transparent;
@@ -78,7 +62,6 @@ a:active {
   width: 100%;
   height: 100%;
   padding: 0.3rem 0.5rem;
-  /* font-size: 1.2rem; */
   color: #555;
 }
 
@@ -110,7 +93,6 @@ a:active {
 .logout-btn {
   background-color: rgb(164, 164, 164);
   margin-left: 90%;
-  /* width: 5rem; */
   padding: 0.5%;
   border-radius: 11%;
 }
@@ -122,23 +104,24 @@ a:active {
 }
 
 .navbar {
-  background-color: #2c3e50ae;
+  background-color: #2c3e506e;
   padding: 1rem 2rem;
 }
 
 .footer {
+
   position: fixed;
-  left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #2c3e50;
+  background-color: #2c3e5042;
   padding: 0.5rem;
-  margin-top: auto;
 
 }
+
 .footer p {
   text-align: center;
 }
+
 .welcome {
   font-size: 24px;
   color: #333;
@@ -152,20 +135,15 @@ a:active {
   padding: 8px 16px;
   border-radius: 8px;
 }
+
 .profile-header {
-    position: absolute;
-    top: 90px;
-    width: 80%;
-    height: 100px;
-    /* margin: 11px; */
-    padding: 19px;
-    display: flex;
-    background-color: #2c3e50c4;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: baseline;
+  position: absolute;
+  top: 90px;
+  width: 80%;
+  padding: 19px;
+  display: flex;
+  background-color: #2c3e50c4;
+  align-items: baseline;
 }
 
 .userdata {
@@ -191,6 +169,7 @@ a:active {
   left: 55%;
   background-color: #2c3e50c4;
 }
+
 #chart {
   width: 100%;
   height: 100%;
@@ -210,13 +189,16 @@ a:active {
   font-size: 10px;
   text-anchor: middle;
 }
+
 .axis-label {
   font-size: 10px;
 }
+
 .tick {
   stroke: #000;
   stroke-width: 1;
 }
+
 .tooltip {
   fill: rgb(158, 158, 158);
   font-size: 12px;
@@ -226,28 +208,29 @@ a:active {
 
 .xpProgress {
   position: absolute;
-    top: 570px;
-  width: 50%;
+  top: 570px;
+  border: solid #a58e60;
   height: 590px;
-  background-color: #2c3e50c4;}
+  background-color: #2c3e50c4;
+}
 
 
 
-  .welcome-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'Arial', sans-serif;
-    padding: 0.75rem;
-  }
-  
-  .welcome-text {
-    font-size: 1.1rem;
-    color: #dbdada;
-  }
-  
-  .user-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #2a6496;
-  }
+.welcome-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Arial', sans-serif;
+  padding: 0.75rem;
+}
+
+.welcome-text {
+  font-size: 1.1rem;
+  color: #dbdada;
+}
+
+.user-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2a6496;
+}

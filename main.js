@@ -3,12 +3,13 @@ async function start() {
     const token = localStorage.getItem("mytoken");
     if (!token) {
         loginTemplate()
-
     } else {
         console.log(token);
         const userdata = await getdata(token)
         // console.log("rrr",userdata);
-        displayProfile(userdata)
+        if (userdata){
+            displayProfile(userdata)
+        }
     }
 }
 
@@ -74,9 +75,11 @@ progress : transaction (
 
 
 function prepareData(data) {
-    
+    console.log("data : ",data);
+    if (data.data.progress.length == 0) {
+        return;
+    }
     let userdata
-
 
     const progressObject = {}
 
@@ -92,13 +95,13 @@ function prepareData(data) {
         "campus": data.data.user[0].campus,
         "auditRatio": (data.data.user[0].auditRatio).toFixed(1),
         "Totalxp": data.data.user[0].transactions_aggregate.aggregate.sum.amount,
-        "totalprogect" :data.data.progress.length,
+        "totalprogect": data.data.progress.length,
         "skills": data.data.skills,
         "progress": progressObject,
     }
 
 
-    console.log("=====", userdata);
+    // console.log("=====", userdata);
     return userdata
 
     // console.log("=============>", data.data);
@@ -130,18 +133,20 @@ async function decod(username, password) {
 
 function displayerror(msgerror) {
     const errormsg = document.querySelector(".error-msg")
-    if (errormsg){
+    if (errormsg) {
         errormsg.textContent = msgerror
     }
 }
+
 //TODO
-//KB FI TOTALXP
-//xpprogress ykon fo9 footer
-//responsive
-//stayle
-//clear code 
+//clear css 
+//stayle 
+//xpprogress ykon fo9 footer 
+//responsive 
 //read svg 
-//good practesses
+//clear code 
+//good practesses 
+
 function displayProfile(userdata) {
     document.body.innerHTML = `
      <nav class="navbar">
@@ -179,7 +184,7 @@ function displayProfile(userdata) {
     ProgressGraph(userdata.progress)
 }
 
- function loginTemplate() {
+function loginTemplate() {
     document.body.innerHTML = `
     <div class="container">
     <div class="login-container">
@@ -205,7 +210,7 @@ function displayProfile(userdata) {
         event.preventDefault()
         const username = document.querySelector(".username").value
         const password = document.querySelector(".password").value
-       decod(username, password)
+        decod(username, password)
     })
 }
 
@@ -221,27 +226,30 @@ function userInfo(userdata) {
     const userDataElem = document.querySelector(".userdata")
     const login = document.createElement("div")
     login.className = "login"
-    login.textContent = "Login: "+ userdata.login
+    login.textContent = "Login: " + userdata.login
     userDataElem.append(login)
 
     const email = document.createElement("div")
     email.className = "email"
-    email.textContent = "Email: "+ userdata.email
+    email.textContent = "Email: " + userdata.email
     userDataElem.append(email)
 
     const campus = document.createElement("div")
     campus.className = "campus"
-    campus.textContent = "Campus: "+ userdata.campus
+    campus.textContent = "Campus: " + userdata.campus
     userDataElem.append(campus)
 
     const auditRatio = document.createElement("div")
     auditRatio.className = "auditRatio"
-    auditRatio.textContent = "AuditRatio: "+ userdata.auditRatio
+    auditRatio.textContent = "AuditRatio: " + userdata.auditRatio
     userDataElem.append(auditRatio)
 
     const TotalXP = document.createElement("div")
     TotalXP.className = "TotalXP"
-    TotalXP.textContent = "TotalXp: "+ userdata.Totalxp
+    if (userdata.Totalxp /1000){
+        console.log('ooo', userdata.Totalxp /1000);
+    }
+    TotalXP.textContent = "TotalXp: " + (((userdata.Totalxp)/1000) < 1000 ? ((userdata.Totalxp)/1000).toFixed(0) +"kB" : ((((userdata.Totalxp/1000))/1000).toFixed(2) +"mB"));
     userDataElem.append(TotalXP)
 
     const TotalProjectValid = document.createElement("div")
@@ -251,122 +259,122 @@ function userInfo(userdata) {
 
 }
 
-function SkillsGraph(skills){
+function SkillsGraph(skills) {
 
-const svg = document.getElementById("chart");
-const barWidth = 30;
-const spacing = 10;
-const paddingLeft = 50;
-const paddingBottom = 40;
-const paddingTop = 20;
-const paddingRight = 20;
-const chartHeight = 200;
-const chartWidth = skills.length * (barWidth + spacing);
+    const svg = document.getElementById("chart");
+    const barWidth = 30;
+    const spacing = 10;
+    const paddingLeft = 50;
+    const paddingBottom = 40;
+    const paddingTop = 20;
+    const paddingRight = 20;
+    const chartHeight = 200;
+    const chartWidth = skills.length * (barWidth + spacing);
 
-const maxPoints = 70; // Rounded for better Y-axis scaling
+    const maxPoints = 70; // Rounded for better Y-axis scaling
 
-// Draw Y-axis ticks and labels
-for (let i = 0; i <= maxPoints; i += 10) {
-  const y = paddingTop + chartHeight - (i / maxPoints) * chartHeight;
+    // Draw Y-axis ticks and labels
+    for (let i = 0; i <= maxPoints; i += 10) {
+        const y = paddingTop + chartHeight - (i / maxPoints) * chartHeight;
 
-  // Tick line
-  const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  tick.setAttribute("x1", paddingLeft - 5);
-  tick.setAttribute("x2", paddingLeft);
-  tick.setAttribute("y1", y);
-  tick.setAttribute("y2", y);
-  tick.setAttribute("class", "tick");
-  svg.appendChild(tick);
+        // Tick line
+        const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        tick.setAttribute("x1", paddingLeft - 5);
+        tick.setAttribute("x2", paddingLeft);
+        tick.setAttribute("y1", y);
+        tick.setAttribute("y2", y);
+        tick.setAttribute("class", "tick");
+        svg.appendChild(tick);
 
-  // Label
-  const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  label.setAttribute("x", paddingLeft - 10);
-  label.setAttribute("y", y + 4);
-  label.setAttribute("text-anchor", "end");
-  label.setAttribute("class", "axis-label");
-  label.textContent = i + " %";
-  svg.appendChild(label);
-}
+        // Label
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", paddingLeft - 10);
+        label.setAttribute("y", y + 4);
+        label.setAttribute("text-anchor", "end");
+        label.setAttribute("class", "axis-label");
+        label.textContent = i + " %";
+        svg.appendChild(label);
+    }
 
-// Y-axis line
-const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-yAxis.setAttribute("x1", paddingLeft);
-yAxis.setAttribute("x2", paddingLeft);
-yAxis.setAttribute("y1", paddingTop);
-yAxis.setAttribute("y2", paddingTop + chartHeight);
-yAxis.setAttribute("stroke", "#000");
-yAxis.setAttribute("stroke-width", 1.5);
-svg.appendChild(yAxis);
+    // Y-axis line
+    const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    yAxis.setAttribute("x1", paddingLeft);
+    yAxis.setAttribute("x2", paddingLeft);
+    yAxis.setAttribute("y1", paddingTop);
+    yAxis.setAttribute("y2", paddingTop + chartHeight);
+    yAxis.setAttribute("stroke", "#000");
+    yAxis.setAttribute("stroke-width", 1.5);
+    svg.appendChild(yAxis);
 
-// X-axis line
-const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-xAxis.setAttribute("x1", paddingLeft);
-xAxis.setAttribute("x2", paddingLeft + chartWidth);
-xAxis.setAttribute("y1", paddingTop + chartHeight);
-xAxis.setAttribute("y2", paddingTop + chartHeight);
-xAxis.setAttribute("stroke", "#000");
-xAxis.setAttribute("stroke-width", 1.5);
-svg.appendChild(xAxis);
+    // X-axis line
+    const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    xAxis.setAttribute("x1", paddingLeft);
+    xAxis.setAttribute("x2", paddingLeft + chartWidth);
+    xAxis.setAttribute("y1", paddingTop + chartHeight);
+    xAxis.setAttribute("y2", paddingTop + chartHeight);
+    xAxis.setAttribute("stroke", "#000");
+    xAxis.setAttribute("stroke-width", 1.5);
+    svg.appendChild(xAxis);
 
-// Tooltip elements (invisible by default)
-const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "text");
-tooltip.setAttribute("class", "tooltip");
-tooltip.setAttribute("visibility", "hidden");
-svg.appendChild(tooltip);
-
-const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-hoverLine.setAttribute("class", "hover-line");
-hoverLine.setAttribute("visibility", "hidden");
-svg.appendChild(hoverLine);
-
-// Bars and X-axis labels
-skills.forEach((skill, index) => {
-  const height = (skill.amount / maxPoints) * chartHeight;
-  const x = paddingLeft + index * (barWidth + spacing);
-  const y = paddingTop + chartHeight - height;
-
-  // Bar
-  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect.setAttribute("x", x);
-  rect.setAttribute("y", y);
-  rect.setAttribute("width", barWidth);
-  rect.setAttribute("height", height);
-  rect.setAttribute("fill", "#69b3a2");
-  svg.appendChild(rect);
-
-  // Label
-  const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  label.setAttribute("x", x + barWidth / 2);
-  label.setAttribute("y", paddingTop + chartHeight + 12);
-  label.setAttribute("class", "label");
-  console.log("eeeeeeeeee",skill.type);
-  
-  label.textContent =  skill.type.slice(6) ;
-  svg.appendChild(label);
-
-  // Hover event listeners
-  rect.addEventListener("mouseenter", function() {
-    tooltip.setAttribute("x", x + barWidth / 2);
-    tooltip.setAttribute("y", y - 10);
-    tooltip.setAttribute("visibility", "visible");
-    tooltip.textContent = skill.amount;
-
-    hoverLine.setAttribute("x1", x + barWidth / 2);
-    hoverLine.setAttribute("y1", paddingTop);
-    hoverLine.setAttribute("x2", x + barWidth / 2);
-    hoverLine.setAttribute("y2", y);
-    hoverLine.setAttribute("visibility", "visible");
-  });
-  rect.addEventListener("mouseleave", function() {
+    // Tooltip elements (invisible by default)
+    const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    tooltip.setAttribute("class", "tooltip");
     tooltip.setAttribute("visibility", "hidden");
+    svg.appendChild(tooltip);
+
+    const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    hoverLine.setAttribute("class", "hover-line");
     hoverLine.setAttribute("visibility", "hidden");
-  });
-});
+    svg.appendChild(hoverLine);
+
+    // Bars and X-axis labels
+    skills.forEach((skill, index) => {
+        const height = (skill.amount / maxPoints) * chartHeight;
+        const x = paddingLeft + index * (barWidth + spacing);
+        const y = paddingTop + chartHeight - height;
+
+        // Bar
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("x", x);
+        rect.setAttribute("y", y);
+        rect.setAttribute("width", barWidth);
+        rect.setAttribute("height", height);
+        rect.setAttribute("fill", "#69b3a2");
+        svg.appendChild(rect);
+
+        // Label
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", x + barWidth / 2);
+        label.setAttribute("y", paddingTop + chartHeight + 12);
+        label.setAttribute("class", "label");
+        console.log("eeeeeeeeee", skill.type);
+
+        label.textContent = skill.type.slice(6);
+        svg.appendChild(label);
+
+        // Hover event listeners
+        rect.addEventListener("mouseenter", function () {
+            tooltip.setAttribute("x", x + barWidth / 2);
+            tooltip.setAttribute("y", y - 10);
+            tooltip.setAttribute("visibility", "visible");
+            tooltip.textContent = skill.amount;
+
+            hoverLine.setAttribute("x1", x + barWidth / 2);
+            hoverLine.setAttribute("y1", paddingTop);
+            hoverLine.setAttribute("x2", x + barWidth / 2);
+            hoverLine.setAttribute("y2", y);
+            hoverLine.setAttribute("visibility", "visible");
+        });
+        rect.addEventListener("mouseleave", function () {
+            tooltip.setAttribute("visibility", "hidden");
+            hoverLine.setAttribute("visibility", "hidden");
+        });
+    });
 
 }
 
-function ProgressGraph(progress){
-    console.log("progress=>",progress);
+function ProgressGraph(progress) {
+    console.log("progress=>", progress);
     const labels = Object.keys(progress);
     const values = Object.values(progress);
 
@@ -403,6 +411,24 @@ function ProgressGraph(progress){
         circle.setAttribute("fill", "blue");
         svg.appendChild(circle);
 
+        const tooltip = document.createElementNS(svgNS, "text");
+        tooltip.setAttribute("visibility", "hidden");
+        tooltip.setAttribute("font-size", "15");
+        tooltip.setAttribute("fill", "black");
+        tooltip.setAttribute("text-anchor", "middle");
+        svg.appendChild(tooltip);
+
+        circle.addEventListener("mouseenter", () => {
+            tooltip.setAttribute("x", x);
+            tooltip.setAttribute("y", y - 10);
+            tooltip.textContent = `${progress[label]} XP`;
+            tooltip.setAttribute("visibility", "visible");
+        });
+
+        circle.addEventListener("mouseleave", () => {
+            tooltip.setAttribute("visibility", "hidden");
+        });
+
         // Label
         const text = document.createElementNS(svgNS, "text");
         text.setAttribute("x", x);
@@ -431,7 +457,7 @@ function ProgressGraph(progress){
     const xAxis = document.createElementNS(svgNS, "line");
     xAxis.setAttribute("x1", padding);
     xAxis.setAttribute("y1", height - padding);
-    xAxis.setAttribute("x2", width - padding);
+    xAxis.setAttribute("x2", width - padding); 
     xAxis.setAttribute("y2", height - padding);
     xAxis.setAttribute("stroke", "#000");
     svg.appendChild(xAxis);
@@ -466,7 +492,8 @@ function ProgressGraph(progress){
         grid.setAttribute("stroke", "#ccc");
         grid.setAttribute("stroke-dasharray", "2,2");
         svg.appendChild(grid);
-    }
 
+
+    }
     document.querySelector(".xpProgress").appendChild(svg);
 }
