@@ -146,13 +146,15 @@ function displayProfile(userdata) {
         <button class="logout-btn">Logout</button>
     </nav>
     <div class="container">
+    
         <div class="profile-header">
         <div class="welcome">Welcome,</div>
         </div>
 
         <div class="userdata">
         </div>
-
+        <div class="userdata2">
+        </div>
         <div class="totalXP">
         <svg id="chart" viewBox="0 0 800 250" preserveAspectRatio="none"></svg>
         </div>
@@ -231,11 +233,11 @@ function userInfo(userdata) {
     campus.className = "campus"
     campus.textContent = "Campus: " + userdata.campus
     userDataElem.append(campus)
-
+const userDataElem2 = document.querySelector(".userdata2")
     const auditRatio = document.createElement("div")
     auditRatio.className = "auditRatio"
     auditRatio.textContent = "AuditRatio: " + userdata.auditRatio
-    userDataElem.append(auditRatio)
+    userDataElem2.append(auditRatio)
 
     const TotalXP = document.createElement("div")
     TotalXP.className = "TotalXP"
@@ -243,12 +245,12 @@ function userInfo(userdata) {
         console.log('ooo', userdata.Totalxp /1000);
     }
     TotalXP.textContent = "TotalXp: " + (((userdata.Totalxp)/1000) < 1000 ? ((userdata.Totalxp)/1000).toFixed(0) +"kB" : ((((userdata.Totalxp/1000))/1000).toFixed(2) +"mB"));
-    userDataElem.append(TotalXP)
+    userDataElem2.append(TotalXP)
 
     const TotalProjectValid = document.createElement("div")
     TotalProjectValid.className = "ProjectValid"
     TotalProjectValid.textContent = "Total Project Valid: " + userdata.totalprogect
-    userDataElem.append(TotalProjectValid)
+    userDataElem2.append(TotalProjectValid)
 
 }
 
