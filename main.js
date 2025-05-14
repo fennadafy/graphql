@@ -99,14 +99,7 @@ function prepareData(data) {
         "skills": data.data.skills,
         "progress": progressObject,
     }
-
-
-    // console.log("=====", userdata);
     return userdata
-
-    // console.log("=============>", data.data);
-
-
 }
 
 

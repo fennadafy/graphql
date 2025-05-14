@@ -23,10 +23,11 @@ a {
 
 .login-header {
   margin-top: 9%;
-  color: #c4c4c4;
+  color: #595959;
 }
 
 .container {
+  padding-top: 160px;
   position: relative;
   display: flex;
   place-content: center;
@@ -37,10 +38,12 @@ a {
 }
 
 .login-container {
+  padding: 2% 8%;
+  padding-top: 15%;
   width: 30rem;
   background: transparent;
   border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, .2);
+  border:2px solid #594100;
   backdrop-filter: blur(9px);
   display: flex;
   flex-direction: column;
@@ -58,11 +61,10 @@ a {
 }
 
 .input {
-  border-radius: 40px;
-  width: 100%;
-  height: 100%;
-  padding: 0.3rem 0.5rem;
-  color: #555;
+ font-size: px;
+     color: #000000;
+  padding: 8px 16px;
+  border-radius: 8px;
 }
 
 .btn:hover {
@@ -97,6 +99,10 @@ a {
   border-radius: 11%;
 }
 
+.logout-btn:hover {
+  transform: scale(1.05);
+}
+
 .error-msg {
   color: rgb(214, 8, 8);
   height: auto;
@@ -104,7 +110,7 @@ a {
 }
 
 .navbar {
-  background-color: #2c3e506e;
+  background-color: #60727481;
   padding: 1rem 2rem;
 }
 
@@ -113,7 +119,7 @@ a {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #2c3e5042;
+  background-color: #60727460;
   padding: 0.5rem;
 
 }
@@ -130,8 +136,8 @@ a {
 }
 
 .username {
-  font-size: 20px;
-  color: #e0e7ff;
+  font-size: 12px;
+     color: #000000;
   padding: 8px 16px;
   border-radius: 8px;
 }
@@ -142,6 +148,7 @@ a {
   width: 80%;
   padding: 19px;
   display: flex;
+    border: solid #a58e60;
   background-color: #2c3e50c4;
   align-items: baseline;
 }
@@ -153,6 +160,8 @@ a {
   width: 43%;
   height: 300px;
   left: 5%;
+    border: solid #a58e60;
+
   background-color: #2c3e50c4;
   flex-wrap: wrap;
   align-content: stretch;
@@ -167,6 +176,8 @@ a {
   width: 43%;
   height: 300px;
   left: 55%;
+    border: solid #a58e60;
+
   background-color: #2c3e50c4;
 }
 
@@ -181,6 +192,8 @@ a {
   width: 40%;
   height: 200px;
   left: 55%;
+    border: solid #a58e60;
+
   background-color: #2c3e50c4;
 }
 
