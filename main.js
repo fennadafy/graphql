@@ -7,7 +7,7 @@ async function start() {
         console.log(token);
         const userdata = await getdata(token)
         // console.log("rrr",userdata);
-        if (userdata){
+        if (userdata) {
             displayProfile(userdata)
         }
     }
@@ -75,7 +75,7 @@ progress : transaction (
 
 
 function prepareData(data) {
-    console.log("data : ",data);
+    console.log("data : ", data);
     if (data.data.progress.length == 0) {
         return;
     }
@@ -132,11 +132,8 @@ function displayerror(msgerror) {
 }
 
 //TODO
-//clear css 
-//stayle 
-//xpprogress ykon fo9 footer 
 //responsive 
-//read svg 
+//read svg + work 
 //clear code 
 //good practesses 
 
@@ -146,11 +143,11 @@ function displayProfile(userdata) {
         <button class="logout-btn">Logout</button>
     </nav>
     <div class="container">
-    
+
         <div class="profile-header">
         <div class="welcome">Welcome,</div>
         </div>
-
+        
         <div class="userdata">
         </div>
         <div class="userdata2">
@@ -158,7 +155,7 @@ function displayProfile(userdata) {
         <div class="totalXP">
         <svg id="chart" viewBox="0 0 800 250" preserveAspectRatio="none"></svg>
         </div>
-
+        
         <div class="xpProgress">
         </div>
 
@@ -233,7 +230,7 @@ function userInfo(userdata) {
     campus.className = "campus"
     campus.textContent = "Campus: " + userdata.campus
     userDataElem.append(campus)
-const userDataElem2 = document.querySelector(".userdata2")
+    const userDataElem2 = document.querySelector(".userdata2")
     const auditRatio = document.createElement("div")
     auditRatio.className = "auditRatio"
     auditRatio.textContent = "AuditRatio: " + userdata.auditRatio
@@ -241,10 +238,10 @@ const userDataElem2 = document.querySelector(".userdata2")
 
     const TotalXP = document.createElement("div")
     TotalXP.className = "TotalXP"
-    if (userdata.Totalxp /1000){
-        console.log('ooo', userdata.Totalxp /1000);
+    if (userdata.Totalxp / 1000) {
+        console.log('ooo', userdata.Totalxp / 1000);
     }
-    TotalXP.textContent = "TotalXp: " + (((userdata.Totalxp)/1000) < 1000 ? ((userdata.Totalxp)/1000).toFixed(0) +"kB" : ((((userdata.Totalxp/1000))/1000).toFixed(2) +"mB"));
+    TotalXP.textContent = "TotalXp: " + (((userdata.Totalxp) / 1000) < 1000 ? ((userdata.Totalxp) / 1000).toFixed(0) + "kB" : ((((userdata.Totalxp / 1000)) / 1000).toFixed(2) + "mB"));
     userDataElem2.append(TotalXP)
 
     const TotalProjectValid = document.createElement("div")
@@ -452,7 +449,7 @@ function ProgressGraph(progress) {
     const xAxis = document.createElementNS(svgNS, "line");
     xAxis.setAttribute("x1", padding);
     xAxis.setAttribute("y1", height - padding);
-    xAxis.setAttribute("x2", width - padding); 
+    xAxis.setAttribute("x2", width - padding);
     xAxis.setAttribute("y2", height - padding);
     xAxis.setAttribute("stroke", "#000");
     svg.appendChild(xAxis);
