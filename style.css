@@ -22,7 +22,6 @@ a:hover {
 }
 
 .container {
-  /* background-color: #2a6496; */
   height: 100%;
   padding: 2rem;
   position: relative;
@@ -30,11 +29,11 @@ a:hover {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  gap: 10px;
 }
 
 .login-container {
   width: 30rem;
-  /* background-color: rgba(201, 21, 21, 0.897); */
   border: 2px solid #a58e60;
   border-radius: 12px;
   backdrop-filter: blur(9px);
@@ -103,7 +102,7 @@ button:hover,
 .skills,
 .xpProgress,
 .userdata2 {
-  width: 50%;
+  width: 45rem;
   background-color: #2c3e50c4;
   border: solid 2px #a58e60;
   padding: 1rem;
@@ -112,42 +111,37 @@ button:hover,
   color: #fff;
 }
 
-/* .totalXP:hover {
-  transform: scale(3.1);
+.totalXP:hover {
+  transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   margin: -10px;
   z-index: 10;
 }
 
 .xpProgress:hover {
-  transform: scale(3.1);
+  transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .userdata:hover {
-  transform: scale(1.5);
+  transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .userdata2:hover {
-  transform: scale(1.5);
+  transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-} */
+}
 
 .profile-header {
-  /* position: absolute;
-  top: 30px;
-  width: 50%;
-  left: 15px;
-  right: 0; */
-  width: 100%;
+
+  width: 80rem;
   background-color: #2c3e50e0;
   border: solid 2px #a58e60;
   padding: 27px;
   display: flex;
   align-items: center;
   border-radius: 8px;
-  margin-bottom: 1rem;
 }
 
 #chart,
